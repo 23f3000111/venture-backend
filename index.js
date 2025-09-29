@@ -1,13 +1,10 @@
 const express = require("express");
-const cors = require("cors");
 const app = express();
+const cors = require("cors");
+app.use(cors({ origin: "*" }));
 
-// ✅ Allow all origins
-app.use(cors());
-app.options("*", cors()); // ✅ Handle preflight OPTIONS request
 
 app.use(express.json());
-
 const { intializeDatabase } = require("./db/db.connect")
 const Venture = require("./models/venture.models")
 
@@ -27,4 +24,3 @@ app.get("/venture", async (req, res) => {
 });
 
 module.exports = app;
-
