@@ -1,17 +1,22 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
-
-app.use(cors({ origin: "*" }));
-
+const PORT = 3000;
 app.use(express.json());
-const { intializeDatabase } = require("./db/db.connect");
-const Venture = require("./models/venture.models");
+app.use(cors()); 
 
-intializeDatabase();
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  if (req.method === "OPTIONS") return res.sendStatus(204);
+  next();
+});
 
-// Handle OPTIONS request for preflight CORS checks
-app.options('*', cors({ origin: "*" }));
+const { intializeDatabase } = require("./db/db.connect")
+const Venture = require("./models/venture.models")
+
+intializeDatabase()
 
 app.get("/venture", async (req, res) => {
   try {
